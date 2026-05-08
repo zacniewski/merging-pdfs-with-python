@@ -1,42 +1,118 @@
-## Merging pdf documents
+# PDF Document Merger 📄✂️
 
+A lightweight Python utility to automatically group and merge PDF documents based on their filenames. Ideal for combining scanned pages or split reports.
 
-#### :arrow_right: The idea behind this script is to merge documents that are similar with their names and differ only with number postfix after underscore.  
+---
 
+## 📑 Table of Contents
+- [Overview](#-overview)
+- [How it Works](#-how-it-works)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [File Naming Convention](#-file-naming-convention)
+- [Examples](#-examples)
+- [Troubleshooting](#-troubleshooting)
 
-#### :arrow_right: Example of two file names, that are handled by this script:  
+---
 
-  * `TypeA_01.pdf`
-  * `TypeA_02.pdf`  
+## 🔍 Overview
+This script automates the tedious task of merging multiple PDF files. It's specifically designed for scenarios where you have sets of documents that belong together, distinguished by a numeric suffix.
 
-#### :arrow_right: Requirements
-  * The only requirement is [PyPDF2](https://pypi.org/project/PyPDF2/) library,  
-  * You can install PyPDF2 via pip: `pip install PyPDF2`.  
+### Key Features:
+- **Smart Grouping**: Automatically identifies groups of files using prefixes.
+- **Sequential Merging**: Merges files in alphabetical/numeric order.
+- **Clean Output**: Generates a single PDF for each group, named after the group prefix.
 
-#### :arrow_right: Basic usage
-  * Starting content of 'pdfs' directory:  
+---
 
-    ![mp1](screenshots/mp1.png)
+## ⚙️ How it Works
+The script scans a directory, identifies files following the `Prefix_Number.pdf` pattern, groups them by `Prefix`, and merges them into `Prefix.pdf`.
 
-  * We have few groups of pdf documents. Every group has the same prefix (before `_`) and differs only with number after `_`,  
+```mermaid
+graph LR
+    A[pdfs/Folder] --> B{Filename Check}
+    B -->|Matches Prefix_NN.pdf| C[Group by Prefix]
+    B -->|No Underscore| D[Skip/Ignore]
+    C --> E[Sort Numerically]
+    E --> F[Merge into Prefix.pdf]
+```
 
-  * Every group is outlined in the separate rectangle,  
+---
 
-  * Some documents are single documents - they don't have any number, or they have unique name and single number after `_`,  
+## 🚀 Installation
 
-  * The `pdfs` directory contains all the documents, and this name is hardcoded in the last line of the script,  
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/merging-pdfs-with-python.git
+   cd merging-pdfs-with-python
+   ```
 
-  * To run a script simply type:  `python3 pdf_merger.py` (or `python pdf_merger.py` depending on your OS),  
+2. **Install dependencies**:
+   This project uses `pypdf`, a modern and robust PDF library.
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-  * Final content of the working directory:  
+---
 
-    ![mp2](screenshots/mp2.png)  
+## 📂 File Naming Convention
+To be correctly identified and merged, your files should follow this format:
+`GroupName_Number.pdf`
 
-  * Interpretation of the final content:
-      * all documents from given group are merged into one document,  
-      * single document (was named with `_` inside and had the number before `.pdf`) is also available in the output,  
-      * documents without `_` in their names weren't merged and aren't available in the output,  
-      * all output documents have the name of the group, without `_` and without number.
+| Input Filename | Group Name | Merged Output |
+| :--- | :--- | :--- |
+| `Invoice_01.pdf` | `Invoice` | `Invoice.pdf` |
+| `Invoice_02.pdf` | `Invoice` | (Merged into Invoice.pdf) |
+| `Report_2023_1.pdf` | `Report_2023` | `Report_2023.pdf` |
+| `Single.pdf` | N/A | (Ignored) |
+
+---
+
+## 🛠 Usage
+
+1. Place your PDF files in a folder named `pdfs/`.
+2. Run the script:
+   ```bash
+   python pdf_merger.py
+   ```
+3. The merged PDF files will appear in the root directory.
+
+---
+
+## 📝 Examples
+
+### Before Merging:
+```text
+pdfs/
+├── ProjectA_01.pdf
+├── ProjectA_02.pdf
+├── ProjectB_1.pdf
+└── ProjectB_2.pdf
+```
+
+### After Merging:
+```text
+.
+├── ProjectA.pdf (Contains pages from 01 and 02)
+├── ProjectB.pdf (Contains pages from 1 and 2)
+└── pdfs/ ...
+```
+
+---
+
+## 🎓 Exercises & Learning
+Check out `exercise.py` for a template to build your own simple PDF merger! It's a great way to practice handling file systems and external libraries in Python.
+
+---
+
+## ❓ Troubleshooting
+
+- **"No PDF files found"**: Ensure your files are in the `pdfs/` directory and have the `.pdf` extension.
+- **Incorrect Order**: The script sorts files alphabetically. For numeric suffixes, use leading zeros (e.g., `_01`, `_02` ... `_10`) to ensure correct sorting beyond 9 files.
+- **Underscore Issues**: The script splits by the *last* underscore. `My_Doc_01.pdf` will have the prefix `My_Doc`.
+
+---
+*Created with ❤️ for efficient document management.*
   
 
 
